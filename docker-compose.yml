@@ -1,0 +1,55 @@
+version: '3.3'
+services:
+  client-react-app:
+      container_name: client-react-prod
+      image: client-react-prod
+      build:
+        context: /frontend/.
+        # target: production
+      networks:
+      - backend
+      environment:
+         NODE_ENV: 'development'
+      ports:
+       - "3000:3000"
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'innfilm'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'innfilm_user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'test1234'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'test1234'
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3309:3306'
+    expose:
+      # Opens port 3307 on the container
+      - '3309'
+    networks:
+      - backend
+      # Where our data will be persisted
+    volumes:
+      - .docker/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - my-db:/var/lib/mysql
+# Names our volume
+  server-main-node:
+    restart: always
+    build: 
+      context:  /backend/.
+    image: server-main-app
+    networks:
+      - backend
+    env_file: /backend/.env
+    ports:
+      - "8080:8080"
+    container_name: server-main-app
+    # network_mode: "host"
+volumes:
+  my-db:
+
+networks:
+  backend:

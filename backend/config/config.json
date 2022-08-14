@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "innfilm_user",
+    "password": "test1234",
+    "database": "innfilm",
+    "host": "localhost",
+    "dialect": "mysql",
+    "port":3309
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
+
