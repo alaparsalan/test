@@ -24,10 +24,10 @@ export const Signup = createAsyncThunk(`${namespace}/FetchSignup`, async (payloa
   });
   return data;
 });
-export const FetchProfile = createAsyncThunk(`${namespace}/FetchProfile`, async (payload, x) => {
+export const FetchProfile = createAsyncThunk(`${namespace}/FetchProfile`, async (token) => {
   const { data } = await Request({
     url: "user/me",
-    token: x.getState().userReducer.token,
+    token: token,
     type: "get",
   });
 

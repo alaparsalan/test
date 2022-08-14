@@ -3,6 +3,7 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from "redux-persist/lib/storage";
 import userReducer from "./slice/user";
 import filmReducer from "./slice/film";
+import commentReducer from "./slice/comment";
 
 const persistConfig = {
   key: "root",
@@ -12,6 +13,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   film: filmReducer,
+  comment:commentReducer,
+  
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

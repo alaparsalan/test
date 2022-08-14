@@ -30,14 +30,17 @@ import {
   Col
 } from "reactstrap";
 import { FetchFilms } from "redux/slice/film";
+import { FetchProfile } from "redux/slice/user";
 
 function Films() {
   const dispatch = useDispatch()
   const history = useHistory()
   const { films } = useSelector((state) => state.film);
+  const { user,token } = useSelector((state) => state.user);
   console.log("films",films);
   useEffect(() => {
     dispatch(FetchFilms());
+    dispatch(FetchProfile(token))
   }, []);
 
 const handlOnMovieClick = (id)=>{

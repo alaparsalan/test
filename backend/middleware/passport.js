@@ -32,7 +32,10 @@ passport.use(
     if (expires > Date.now()) {
       console.log("OK");
       return User.findOne({ where: { id } })
-        .then((user) => done(null, user))
+        .then((user) => {
+          console.log("SSS",user);
+          return done(null, user)
+        })
         .catch(done);
     }
     return done(null, false);

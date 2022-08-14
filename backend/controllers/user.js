@@ -29,13 +29,23 @@ module.exports = {
       console.log(req.headers);
       next();
     },
-    passport.authenticate("bearer"),
-    (req, res) => res.json(req.user),
+    (req, res) => {
+      const token = req.header('Authorization').split(" ")[1]
+      const decodedToken = jwt.decode(token, JWT_TOKEN);
+      const id = decodedToken && decodedToken.id;
+      const expires = decodedToken && new Date(decodedToken.exp * 1000);
+      if (expires > Date.now())
+      return res.status(401).send({ message:"token expired" })
+        console.log("OK", id);
+          User.findOne({ where: { id } })
+          .then((user) => {
+            res.status(200).send({ user });
+          })
+        }
   ]),
   login: compose([
     SignInValidation,
     validateReq("Sign Up Failed!"),
-    // passport.authenticate("local"),
    async (req, res) => {
       const user = await User.findOne({ where: { email: req.body.username } })
       if (!user)  res.status(401).send({message:"no user!"});
@@ -48,7 +58,7 @@ module.exports = {
           id: user.id,
         },
         JWT_TOKEN,
-        { expiresIn: TOKEN_EXPIRATION_TIME }
+        // { expiresIn: TOKEN_EXPIRATION_TIME }
       );
 
       res.status(200).send({ token });

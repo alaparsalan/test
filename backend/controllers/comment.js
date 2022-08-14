@@ -10,7 +10,7 @@ const PostCommentsValidation = [
 ];
 const GetCommentsValidation = [param("FilmId").isNumeric().withMessage("must be required Number").toInt()];
 const DeleteCommentsValidation = [param("id").isNumeric().withMessage("must be required Number").toInt()];
-
+const verify = require('../middleware/verifyToken') 
 module.exports = {
   listByFilm: compose([
     GetCommentsValidation,
@@ -29,7 +29,7 @@ module.exports = {
   create: compose([
     PostCommentsValidation,
     validateReq("Comment Creating Failed!"),
-    passport.authenticate("bearer"),
+    verify,
     (req, res) => {
       const { id: UserId } = req.user;
       const { content } = req.body;
@@ -43,7 +43,7 @@ module.exports = {
         .catch((error) => res.status(400).send(error));
     },
   ]),
-  delete: compose([DeleteCommentsValidation, validateReq(), passport.authenticate("bearer")], async (req, res) => {
+  delete: compose([DeleteCommentsValidation, validateReq(), verify], async (req, res) => {
     const { id: UserId } = req.user;
     const { id } = req.params;
 
